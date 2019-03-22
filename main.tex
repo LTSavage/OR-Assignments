@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{forloop}
+\usepackage{simplex}
+
+
+
+\title{JF3: A Diet Problem}
+\author{Kieran Molloy}
+\date{January 2019}
+
+\begin{document}
+
+\maketitle
+%%%%%%%
+\section{Formulation \& Tableaux}
+Let $x_{i}$ be the amount of foodtype $\textit{i}$ to be consumed.
+
+The diet plan must adhere to the following constraints: (all g, per serving)
+\constraints{
+  Carbohydrates:&  0x_s+60x_p+8x_t \geq 150,\cr
+  Protein:&  50x_s+4x_p+5x_t\geq 160,\cr
+  Fat:&  16x_s+1x_p+0x_t\geq 96,\cr
+  Vitamin C:&  0.01x_s+0.3x_p+0.43x_t\geq 1,\cr
+}
+The objective function is to minimise cost, whilst satisfying diet constraints:
+\constraints{
+  Cost(£):&&3.5x_s+1.5x_p+1x_t. \cr
+}
+
+Initial Formulation
+  \begin{equation}
+    \mprog{2}{minimise& 3.5 x_1 &+& 1.5 x_2 &\cr %%% the first {2} is the number of decision variables
+      s.t.& && 60 x_2 \geq& 150\cr
+      & 50 x_1 &+& 4 x_2\geq& 160\cr
+      & 16 x_1 &+&  x_2\leq& 96\cr
+      & x_1\comma&&x_2\geq&0\cr
+    }
+  \end{equation}
+
+  The initial primal tableau is
+  \[
+    \begin{array}{|c|c|cc|ccc|cc|}
+      \hline
+      \Basis&\val&x_1&x_2&s_1&s_2&s_3&a_1&a_2\\
+      \hline
+      s_1 & 150 &  0 & 60 & -1 &  0 & 0 & 1 & 0\\
+      s_2 & 160 & 50 &  4 &  0 & -1 & 0 & 0 & 1\\
+      s_3 & 96  & 16 &  1 &  0 &  0 & 1 & 0 & 0
+      \hline
+      \obj & -310 & -50 & -64 &1 & 1 & 0 & 0 & 0 \\
+      \hline
+    \end{array}
+  \]
+  The solved primal tableau:
+    \[
+    \begin{array}{|c|c|ccc|cc|}
+      \hline
+      \Basis&\val&x_1&x_2&x_3&s_1&s_2\\
+      \hline
+      x_1 & 15 & 1 & 0 & 1 & \frac{1}{10} & -1\\
+      x_2 & 25 & 0 & 1 & 2  & 0 & 1\\
+      \hline
+      \obj & 1800& 0 & 0 &50 & 2 & 40 \\
+      \hline
+    \end{array}
+  \]
+
+
+
+%%%%%
+
+\section{Optimal Production Plan}
+  The optimal production plan is to create:\\ 15 Desk 1's,\\ 25 Desk 2's,\\ 0 Desk 3's.\\ To get an optimal profit of:\\ \pounds1800 per week
+  
+The dual solution tells us that if we had more Mahogany(sq.m) we could make more profit. \\
+
+If we were to take all the extra 15sq.m, revenue increases to \pounds2400, with a production plan of just 40 Desk.2. However the increased price of Mahogany(sq.m) means it is less profitable to purchase the extra mahogany when the cost of purchasing is included in the profit equation.
+
+
+\end{document}

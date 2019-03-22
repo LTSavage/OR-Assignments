@@ -1,0 +1,55 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{simplex}[04/02/2019 A simple simplex LaTeX format]
+
+\def\comma{\rlap{,}}
+
+%%% mathematical programming formulations
+\def\constraints#1{%
+  \[\vcenter{\openup\jot
+  \ialign{\strut##\hfil&\quad$\displaystyle{##}$\hfil&\quad$##$\hfil\cr
+  #1\crcr}}\]
+}
+\def\varidesc#1{%
+  \par\medskip
+  {\setlength{\tabcolsep}{0pt}
+  \noindent
+  \begin{tabular}{l>{\ $}l<{$\ }l}
+    #1
+  \end{tabular}}
+  \medskip
+}
+
+%%% \mprog{no. variables}{maximise&bla&bla&bla&\leq&b\cr}
+\newcounter{mpvarnum}
+\newtoks\mpheader
+
+\def\addmpheader#1{%
+  \mpheader\expandafter{\the\mpheader#1}%
+}
+
+\def\makempheader#1{%
+  \mpheader{}%
+  \addmpheader{\strut##\hfil\quad&}% start of definition: maximise&
+  % now add the necessary number of columns
+  \forloop{mpvarnum}{0}{\value{mpvarnum}<#1}{%
+    \addmpheader{\hfil$\displaystyle{##}$&\hfil$\displaystyle{{}##{}}$\hfil&}%
+  }%
+  \addmpheader{$\displaystyle{##}$\hfil}% \leq & 42\cr
+}
+
+
+\def\mprog#1#2{%
+  \makempheader{#1}%
+  \vcenter{\openup\jot
+    \ialign{\span\the\mpheader\cr
+    #2\crcr}}
+}
+
+\def\subjectto{%
+  \hbox to 0pt{subject to the constraints:\hss}\cr
+}
+
+%%% simplex tableaux
+\def\Basis{\text{\textbf{Basis}}}
+\def\val{\text{\textbf{val}}}
+\def\obj{\text{\textbf{obj}}}
